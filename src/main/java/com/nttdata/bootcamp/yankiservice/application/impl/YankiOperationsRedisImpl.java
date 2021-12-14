@@ -3,6 +3,7 @@ package com.nttdata.bootcamp.yankiservice.application.impl;
 import com.nttdata.bootcamp.yankiservice.application.YankiOperations;
 import com.nttdata.bootcamp.yankiservice.application.repository.YankiRepository;
 import com.nttdata.bootcamp.yankiservice.domain.Yanki;
+import com.nttdata.bootcamp.yankiservice.infrastructure.model.dto.StatementDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -46,5 +47,10 @@ public class YankiOperationsRedisImpl implements YankiOperations {
     @Override
     public Mono<Void> delete(Long id) {
         return yankiOps.opsForValue().delete(id.toString()).then();
+    }
+
+    @Override
+    public Mono<StatementDto> send(StatementDto dto) {
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package com.nttdata.bootcamp.yankiservice.infrastructure.rest;
 import com.nttdata.bootcamp.yankiservice.application.YankiOperations;
 import com.nttdata.bootcamp.yankiservice.domain.Yanki;
 import com.nttdata.bootcamp.yankiservice.infrastructure.model.dto.OperationDto;
+import com.nttdata.bootcamp.yankiservice.infrastructure.model.dto.StatementDto;
 import com.nttdata.bootcamp.yankiservice.infrastructure.producer.KafkaStringProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Operators;
 
+import java.sql.Statement;
+
 @Slf4j
 @RestController
 @RequestMapping("/yanki")
@@ -23,8 +26,6 @@ import reactor.core.publisher.Operators;
 public class YankiController {
 
     private final YankiOperations operations;
-
-    private final KafkaStringProducer kafkaStringProducer;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Flux<Yanki>>> getAll() {
@@ -50,6 +51,11 @@ public class YankiController {
     @PostMapping(value = "associate", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Yanki>> associateDebitCard(@RequestBody OperationDto dto) {
         return operations.associateDebitCard(dto.getId(), dto.getCardId()).map(ResponseEntity::ok);
+    }
+
+    @PostMapping(value = "send", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<StatementDto>> send(@RequestBody StatementDto dto) {
+        return operations.send(dto).map(ResponseEntity::ok);
     }
 
     //@CacheEvict(value= "Yankis", allEntries = false, key="#id")
